@@ -34,4 +34,25 @@ var misc = ( () => {
 		e.target.download =  "myDrawIt.png";
 	});
 
+		// get Brush element from toolbar
+	var brush =toolbar.getToolbar().getElementsByClassName('brushTool')[0];
+
+	// Add event listener
+	brush.addEventListener('click',(e)=>{
+
+		//emit brush_event event so now brush would be active tool
+		pubsub.emit('default-brush',brushTool);
+
+	})
+
+	// get Line element from toolbar
+	var line =toolbar.getToolbar().getElementsByClassName('lineTool')[0];
+
+	// Add event listener
+	line.addEventListener('click',(e)=>{
+		//emit drawLine event so now line would be active tool
+		pubsub.emit('drawLine',lineTool);
+
+	})
+
 })();

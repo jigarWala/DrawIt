@@ -11,32 +11,36 @@ var myCanvas = ( () => {
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
 
+	//changed dynamically when window resized
+	window.addEventListener("resize", (e)=>{
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	});
+
 	// Initialize mouse pointer and brush size
 	var down = false;
 	var bs = 15;
+	var tools ={ };
+	var activeTool;
 
-	// e is the event passed
-	var drawPoint = e => {
 
-		// If the mouse button is pressed
-		if(down == true) {
+	// // drawPoint is the function to draw with brush tool
+	var brushTool = drawPoint => {
+		activeTool="brushTool";
 
-			//Draw a line to this point from whereever the canvas point was previously
-			context.lineTo(e.clientX, e.clientY);
-			context.lineWidth = bs*2;
-			context.stroke();
+		//first time
+		if(!tools["brushTool"])
+			tools[activeTool]=drawPoint
 
-			// Create a point
-			context.beginPath();
-			context.arc(e.clientX, e.clientY, bs, 0, 2*Math.PI);
+	}
 
-			// Fill the point
-			context.fill();
+	//drawLine is function to draw Line
+	var lineTool = drawLine => {
+		// when line tool selected change active tool to line tool
+		activeTool="lineTool";
 
-			// Send the canvas context to the new point
-			context.beginPath();
-			context.moveTo(e.clientX, e.clientY);
-		}
+		if(!tools["lineTool"])
+			tools[activeTool]=drawLine
 	}
 
 	var mouseup = e => {
@@ -60,14 +64,18 @@ var myCanvas = ( () => {
 			// Click it
 			down = true;
 
-			// Draw the point
-			drawPoint(e);
+			//draw with appropriate tool
+			tools[activeTool](e);
 		}
+	}
+
+	var whichToolToSelect=(e)=>{
+		tools[activeTool](e);
 	}
 
 	// Set listeners
 	canvas.addEventListener('mousedown',mousedown);
-	canvas.addEventListener('mousemove',drawPoint);
+	canvas.addEventListener('mousemove',whichToolToSelect);
 
 	// Mouse up from entire document should unclick
 	document.addEventListener('mouseup',mouseup);
@@ -99,10 +107,21 @@ var myCanvas = ( () => {
 	pubsub.on('changeBrush', setBrush);
 	pubsub.on('setColor', setcolor);
 	pubsub.on('erase', erase);
+	pubsub.on('default-brush', brushTool);
+	pubsub.on('drawLine', lineTool);
 
 	// Export the canvas object to access from outside
 	return {
-		canvas: canvas
+		canvas: canvas,
+		getBrushSize:()=>{
+			return bs;
+		},
+		getContext:()=>{
+			return context;
+		},
+		getMouseState:()=>{
+			return down;
+		}
 	}
 
 })();

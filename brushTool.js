@@ -53,14 +53,44 @@ var brushTool = ( () => {
 								+brushSize+`
 								</span></p><div id="dec" class="bsb dec">-</div>
 								<div id="inc" class="bsb inc">+</div>`;
-		
+
 		// Add listeners
 		(brushTool.getElementsByClassName('dec')[0]).addEventListener('click', decreaseBrushSize);
 		(brushTool.getElementsByClassName('inc')[0]).addEventListener('click', increaseBrushSize);
 
-	} 
+	}
 
 	// Render the brush tool initially
 	render();
 
+			// e is the event passed
+	var drawPoint = e => {
+
+			var down = myCanvas.getMouseState();
+			var context=myCanvas.getContext();
+			var bs=myCanvas.getBrushSize();
+		// If the mouse button is pressed
+		if(down == true) {
+
+			context.lineTo(e.clientX, e.clientY);
+			context.lineWidth = bs*2;
+			context.stroke();
+
+			// Create a point
+			context.beginPath();
+			context.arc(e.clientX, e.clientY, bs, 0, 2*Math.PI);
+
+			// Fill the point
+			context.fill();
+
+			// Send the canvas context to the new point
+			context.beginPath();
+			context.moveTo(e.clientX, e.clientY);
+		}
+	}
+	return drawPoint;
+
 })();
+
+//default brush tool emit event
+pubsub.emit('default-brush',brushTool);
