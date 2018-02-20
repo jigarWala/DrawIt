@@ -14,7 +14,7 @@ pubsub.on('erase',()=>socket.emit('erase'));
 
 socket.on('clearCanvas',myCanvas.clearCanvas);
 
-socket.on('clearCanvas',myCanvas.erase);
+socket.on('erase',myCanvas.erase);
 
 //from server when other user does the changes
 socket.on('changeBrush',bs=>{
