@@ -25,7 +25,7 @@ var drawLine = e => {
 				startPoint=[e.clientX,e.clientY]
 			}
 			else{
-				console.log('ful zaal')
+
 				context.moveTo(startPoint[0],startPoint[1]);
 				context.lineTo(e.clientX,e.clientY);
 				var prev=context.lineWidth

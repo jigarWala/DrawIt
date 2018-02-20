@@ -15,9 +15,6 @@ var brushTool = ( () => {
 		else if(newbs > maxbs) brushSize=maxbs;
 		else brushSize = newbs;
 
-		// Publish that brush size has changed
-		pubsub.emit('changeBrush', brushSize);
-
 		// Render the brush size element in html
 		render();
 	}
@@ -27,6 +24,9 @@ var brushTool = ( () => {
 
 		// New brush size
 		setBrushSize( brushSize-2 );
+
+		// Publish that brush size has changed
+		pubsub.emit('changeBrush', brushSize);
 	}
 
 	// Function to increse brush size
@@ -34,6 +34,9 @@ var brushTool = ( () => {
 
 		// New brush size
 		setBrushSize( brushSize+2 );
+
+		// Publish that brush size has changed
+		pubsub.emit('changeBrush', brushSize);
 	}
 
 	// This function paints our javascript (hypothetical) brush tool to HTML page
@@ -88,7 +91,11 @@ var brushTool = ( () => {
 			context.moveTo(e.clientX, e.clientY);
 		}
 	}
-	return drawPoint;
+
+	return {
+		drawPoint:drawPoint,
+		setBrushSize:setBrushSize
+	}
 
 })();
 

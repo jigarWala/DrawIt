@@ -25,12 +25,12 @@ var myCanvas = ( () => {
 
 
 	// // drawPoint is the function to draw with brush tool
-	var brushTool = drawPoint => {
+	var brushTool = obj => {
 		activeTool="brushTool";
 
 		//first time
 		if(!tools["brushTool"])
-			tools[activeTool]=drawPoint
+			tools[activeTool]=obj.drawPoint
 
 	}
 
@@ -121,7 +121,11 @@ var myCanvas = ( () => {
 		},
 		getMouseState:()=>{
 			return down;
-		}
+		},
+		clearCanvas:clrcan,
+		erase:erase,
+		setBrush:setBrush,
+		setColor:setcolor,
 	}
 
 })();
